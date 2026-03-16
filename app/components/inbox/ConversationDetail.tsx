@@ -1,4 +1,6 @@
+'use client';
 import Image from "next/image";
+import CustomButton from "@/app/components/forms/CustomButton";
 
 const ConversationDetail = () => {
     return (
@@ -15,16 +17,20 @@ const ConversationDetail = () => {
                 </div>
             </div>
 
-            <div className="mt-4 px-6 flex border border-gray-300 space-x-4 rounded-xl">
+            <div className="mt-4 flex items-center space-x-3 rounded-xl border border-gray-300 px-4 py-3">
                 <input 
                     type="text"
                     placeholder="Type your message..."
-                    className="w-full p-2 bg-gray-200 rounded-xl"
+                    className="h-11 w-full rounded-xl bg-gray-200 px-4"
                     name=""
                     id="" 
                 />
 
-                <CustomButton/>
+                <CustomButton
+                    label="Send"
+                    onClick={() => console.log("Send clicked")}
+                    className="h-11 w-[100px] bg-airbnb px-4 py-2 text-white"
+                />
             </div>
         </>
     );
