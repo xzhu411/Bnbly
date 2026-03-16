@@ -14,11 +14,9 @@ interface AuthState {
     user: User | null;
     accessToken: string | null;
     refreshToken: string | null;
-
     setAuth: (user: User, accessToken: string, refreshToken: string) => void;
     clearAuth: () => void;
     isAuthenticated: () => boolean;
-    setAuth: (user: User, accessToken: string, refreshToken: string) => void;
 }
 
 const useAuth = create<AuthState>()(
@@ -51,7 +49,6 @@ export async function loginUser(email: string, password: string) {
         method: 'POST',
         body: { email, password },
     });
-
     useAuth.getState().setAuth(data.user, data.access, data.refresh);
     return data.user;
 }
@@ -70,7 +67,6 @@ export async function signupUser(
         method: 'POST',
         body: { name, email, password1, password2 },
     });
-
     useAuth.getState().setAuth(data.user, data.access, data.refresh);
     return data.user;
 }
