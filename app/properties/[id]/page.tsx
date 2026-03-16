@@ -5,6 +5,7 @@ import ReservationSideBar from "@/app/components/properties/ReservationSideBar";
 import ContactHost from "@/app/components/properties/ContactHost";
 import FavouriteButton from "@/app/components/properties/FavouriteButton";
 import PropertyMap from "@/app/components/properties/PropertyMap";
+import { API_URL } from "@/lib/config";
 
 interface Landlord {
     id: string;
@@ -42,7 +43,7 @@ interface Property {
 
 async function getProperty(id: string): Promise<Property | null> {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties/${id}/`, { cache: "no-store" });
+        const res = await fetch(`${API_URL}/api/properties/${id}/`, { cache: "no-store" });
         if (!res.ok) return null;
         return await res.json();
     } catch { return null; }

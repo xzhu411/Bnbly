@@ -18,6 +18,8 @@ interface Property {
     category: string;
 }
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 const MyPropertiesPage = () => {
     const { accessToken, isAuthenticated } = useAuth();
     const [properties, setProperties] = useState<Property[]>([]);
@@ -30,7 +32,7 @@ const MyPropertiesPage = () => {
 
     useEffect(() => {
         if (!mounted || !isAuthenticated()) { setIsLoading(false); return; }
-        authFetch("${process.env.NEXT_PUBLIC_API_URL}/api/properties/my/", {
+        authFetch(`${API_BASE}/api/properties/my/`, {
             headers: { Authorization: `Bearer ${accessToken}` },
         })
             .then(res => res.json())
@@ -46,7 +48,7 @@ const MyPropertiesPage = () => {
         setDeletingId(id);
         try {
             const res = await authFetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/api/properties/${id}/delete/`,
+                `${API_BASE}/api/properties/${id}/delete/`,
                 {
                     method: 'DELETE',
                     headers: { Authorization: `Bearer ${accessToken}` },

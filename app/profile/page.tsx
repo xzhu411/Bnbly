@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import useAuth from "@/hooks/useAuth";
 import { authFetch } from "@/lib/axios";
+import { API_URL } from "@/lib/config";
 
 const ProfilePage = () => {
     const { user, accessToken, isAuthenticated, setAuth, refreshToken } = useAuth();
@@ -26,7 +27,7 @@ const ProfilePage = () => {
             if (user.avatar) {
                 const url = user.avatar.startsWith('http')
                     ? user.avatar
-                    : `${process.env.NEXT_PUBLIC_API_URL}${user.avatar}`;
+                    : `${API_URL}${user.avatar}`;
                 setAvatarPreview(url);
             }
         }
@@ -51,7 +52,7 @@ const ProfilePage = () => {
             if (name) formData.append('name', name);
             if (avatarFile) formData.append('avatar', avatarFile);
 
-            const res = await authFetch('${process.env.NEXT_PUBLIC_API_URL}/api/auth/profile/', {
+            const res = await authFetch(`${API_URL}/api/auth/profile/`, {
                 method: 'PATCH',
                 headers: { Authorization: `Bearer ${accessToken}` },
                 body: formData,
@@ -68,7 +69,7 @@ const ProfilePage = () => {
                 if (updatedUser.avatar) {
                     const url = updatedUser.avatar.startsWith('http')
                         ? updatedUser.avatar
-                        : `${process.env.NEXT_PUBLIC_API_URL}${updatedUser.avatar}`;
+                        : `${API_URL}${updatedUser.avatar}`;
                     setAvatarPreview(url);
                 }
             } else {

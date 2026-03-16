@@ -8,6 +8,8 @@ interface FavouriteButtonProps {
     propertyId: string;
 }
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 const FavouriteButton = ({ propertyId }: FavouriteButtonProps) => {
     const { accessToken, isAuthenticated } = useAuth();
     const loginModal = useLoginModal();
@@ -18,7 +20,7 @@ const FavouriteButton = ({ propertyId }: FavouriteButtonProps) => {
     useEffect(() => {
         if (!isAuthenticated() || !accessToken) return;
 
-        fetch("${process.env.NEXT_PUBLIC_API_URL}/api/properties/favourites/", {
+        fetch(`${API_BASE}/api/properties/favourites/`, {
             headers: { Authorization: `Bearer ${accessToken}` },
         })
             .then(res => res.json())
@@ -39,7 +41,7 @@ const FavouriteButton = ({ propertyId }: FavouriteButtonProps) => {
         setIsLoading(true);
         try {
             const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/api/properties/${propertyId}/toggle-favourite/`,
+                `${API_BASE}/api/properties/${propertyId}/toggle-favourite/`,
                 {
                     method: "POST",
                     headers: { Authorization: `Bearer ${accessToken}` },

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import useAuth from "@/hooks/useAuth";
 import useLoginModal from "@/hooks/useLoginModal";
+import { API_URL } from "@/lib/config";
 
 interface ContactHostProps {
     landlordId: string;
@@ -23,7 +24,7 @@ const ContactHost = ({ landlordId, propertyId }: ContactHostProps) => {
         setIsLoading(true);
         try {
             const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/api/conversations/start/${landlordId}/`,
+                `${API_URL}/api/conversations/start/${landlordId}/`,
                 {
                     method: "POST",
                     headers: {

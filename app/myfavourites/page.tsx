@@ -14,6 +14,8 @@ interface Property {
     category: string;
 }
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 const MyFavouritesPage = () => {
     const { accessToken, isAuthenticated } = useAuth();
     const [properties, setProperties] = useState<Property[]>([]);
@@ -28,7 +30,7 @@ const MyFavouritesPage = () => {
             return;
         }
 
-        fetch("${process.env.NEXT_PUBLIC_API_URL}/api/properties/favourites/", {
+        fetch(`${API_BASE}/api/properties/favourites/`, {
             headers: { Authorization: `Bearer ${accessToken}` },
         })
             .then(res => res.json())

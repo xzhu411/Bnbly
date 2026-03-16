@@ -7,6 +7,7 @@ import useAddPropertyModal from "@/hooks/useAddPropertyModal";
 import useAuth from "@/hooks/useAuth";
 import useLoginModal from "@/hooks/useLoginModal";
 import { useRouter } from "next/navigation";
+import { API_URL } from "@/lib/config";
 
 const CATEGORIES = ['Beach', 'Villas', 'Cabins', 'Tiny homes', 'City', 'Countryside'];
 
@@ -90,7 +91,7 @@ const AddPropertyModal = () => {
             if (image) formData.append('image', image);
             extraImages.forEach(img => formData.append('images', img));
 
-            const res = await fetch('${process.env.NEXT_PUBLIC_API_URL}/api/properties/create/', {
+            const res = await fetch(`${API_URL}/api/properties/create/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${accessToken}` },
                 body: formData,

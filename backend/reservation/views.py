@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Reservation
@@ -14,11 +14,11 @@ def create_reservation(request, property_id):
     try:
         property = Property.objects.get(pk=property_id)
     except Property.DoesNotExist:
-        return Response({'error': '房源不存在'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Property not found'}, status=status.HTTP_404_NOT_FOUND)
 
     # 不能预订自己的房源
     if property.landlord == request.user:
-        return Response({'error': '不能预订自己的房源'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Can not book your own property'}, status=status.HTTP_400_BAD_REQUEST)
 
     serializer = CreateReservationSerializer(data=request.data)
     if serializer.is_valid():
@@ -34,7 +34,7 @@ def create_reservation(request, property_id):
 
         if conflict:
             return Response(
-                {'error': '该日期已被预订，请选择其他日期'},
+                {'error': 'The selected dates are not available. Please choose different dates.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -47,7 +47,7 @@ def create_reservation(request, property_id):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def my_reservations(request):
-    """获取当前用户的所有预订"""
+    """Get all reservations for the current user"""
     reservations = Reservation.objects.filter(
         guest=request.user
     ).select_related('property').order_by('-created_at')
@@ -62,9 +62,9 @@ def cancel_reservation(request, reservation_id):
     try:
         reservation = Reservation.objects.get(pk=reservation_id, guest=request.user)
         reservation.delete()
-        return Response({'message': '预订已取消'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Reservation cancelled'}, status=status.HTTP_200_OK)
     except Reservation.DoesNotExist:
-        return Response({'error': '预订不存在'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Reservation not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])
@@ -93,3 +93,12 @@ def cancel_reservation_as_host(request, reservation_id):
         return Response({'message': 'Reservation cancelled'}, status=status.HTTP_200_OK)
     except Reservation.DoesNotExist:
         return Response({'error': 'Reservation not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def booked_dates(request, property_id):
+    """Return all booked date ranges for a property"""
+    reservations = Reservation.objects.filter(property_id=property_id)
+    data = [{'check_in': str(r.check_in), 'check_out': str(r.check_out)} for r in reservations]
+    return Response(data)

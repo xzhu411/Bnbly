@@ -7,4 +7,5 @@ urlpatterns = [
     path('create/<uuid:property_id>/', views.create_reservation, name='create_reservation'),
     path('cancel/<uuid:reservation_id>/', views.cancel_reservation, name='cancel_reservation'),
     path('host-cancel/<uuid:reservation_id>/', views.cancel_reservation_as_host, name='cancel_reservation_as_host'),
+    path('booked-dates/<uuid:property_id>/', views.booked_dates, name='booked_dates'),
 ]

@@ -36,6 +36,8 @@ interface Conversation {
     modified_at: string;
 }
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 const InboxPage = () => {
     const { accessToken, user, isAuthenticated } = useAuth();
     const loginModal = useLoginModal();
@@ -48,7 +50,7 @@ const InboxPage = () => {
     useEffect(() => {
         if (!mounted) return;
         if (!isAuthenticated()) { setIsLoading(false); return; }
-        fetch("${process.env.NEXT_PUBLIC_API_URL}/api/conversations/", {
+        fetch(`${API_BASE}/api/conversations/`, {
             headers: { Authorization: `Bearer ${accessToken}` },
         })
             .then(res => res.json())
@@ -92,7 +94,7 @@ const InboxPage = () => {
                     {conversations.map((conv) => {
                         const other = conv.participants.find(p => p.id !== user?.id);
                         const otherAvatarUrl = other?.avatar_url || (other?.avatar
-                            ? (other.avatar.startsWith('http') ? other.avatar : `${process.env.NEXT_PUBLIC_API_URL}${other.avatar}`)
+                            ? (other.avatar.startsWith('http') ? other.avatar : `${API_BASE}${other.avatar}`)
                             : null);
 
                         // If current user is the landlord → other person is Guest

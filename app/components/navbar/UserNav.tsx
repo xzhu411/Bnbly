@@ -6,6 +6,7 @@ import useLoginModal from "@/hooks/useLoginModal";
 import useSignupModal from "@/hooks/useSignupModal";
 import useAuth, { logoutUser } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { API_URL } from "@/lib/config";
 
 const UserNav = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +26,7 @@ const UserNav = () => {
     // Fix: safely handle null avatar
     const rawAvatar = (user as any)?.avatar_url || user?.avatar || null;
     const avatarUrl = rawAvatar
-        ? (rawAvatar.startsWith('http') ? rawAvatar : `${process.env.NEXT_PUBLIC_API_URL}${rawAvatar}`)
+        ? (rawAvatar.startsWith('http') ? rawAvatar : `${API_URL}${rawAvatar}`)
         : null;
 
     const initials = user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || '?';

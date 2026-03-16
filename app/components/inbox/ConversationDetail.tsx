@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import CustomButton from "@/app/components/forms/CustomButton";
 import useAuth from "@/hooks/useAuth";
+import { API_URL, WS_URL } from "@/lib/config";
 
 interface Sender {
     id: string;
@@ -62,7 +63,7 @@ const ConversationDetail = ({ conversationId }: { conversationId: string }) => {
         if (!mounted || !accessToken) return;
         if (!isAuthenticated()) { router.push('/'); return; }
 
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/conversations/${conversationId}/`, {
+        fetch(`${API_URL}/api/conversations/${conversationId}/`, {
             headers: { Authorization: `Bearer ${accessToken}` },
         })
             .then(res => res.json())
@@ -77,7 +78,7 @@ const ConversationDetail = ({ conversationId }: { conversationId: string }) => {
         if (!mounted || !accessToken || !isAuthenticated()) return;
 
         const ws = new WebSocket(
-            `ws://localhost:8000/ws/conversations/${conversationId}/?token=${accessToken}`
+            `${WS_URL}/ws/conversations/${conversationId}/?token=${accessToken}`
         );
 
         ws.onopen = () => {
@@ -125,7 +126,7 @@ const ConversationDetail = ({ conversationId }: { conversationId: string }) => {
             setIsLoading(true);
             try {
                 const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/api/conversations/${conversationId}/send/`,
+                    `${API_URL}/api/conversations/${conversationId}/send/`,
                     {
                         method: "POST",
                         headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
@@ -150,7 +151,7 @@ const ConversationDetail = ({ conversationId }: { conversationId: string }) => {
 
     const other = info?.participants.find(p => p.id !== user?.id);
     const otherAvatarUrl = other?.avatar_url || (other?.avatar
-        ? (other.avatar.startsWith('http') ? other.avatar : `${process.env.NEXT_PUBLIC_API_URL}${other.avatar}`)
+        ? (other.avatar.startsWith('http') ? other.avatar : `${API_URL}${other.avatar}`)
         : null);
     const currentUserIsLandlord = info?.property_landlord_id === user?.id;
     const roleLabel = info?.property_id ? (currentUserIsLandlord ? 'Guest' : 'Host') : null;
@@ -207,7 +208,7 @@ const ConversationDetail = ({ conversationId }: { conversationId: string }) => {
                 {messages.map((msg) => {
                     const isMe = msg.sender.id === user?.id;
                     const senderAvatarUrl = msg.sender.avatar_url || (msg.sender.avatar
-                        ? (msg.sender.avatar.startsWith('http') ? msg.sender.avatar : `${process.env.NEXT_PUBLIC_API_URL}${msg.sender.avatar}`)
+                        ? (msg.sender.avatar.startsWith('http') ? msg.sender.avatar : `${API_URL}${msg.sender.avatar}`)
                         : null);
                     return (
                         <div key={msg.id} className={`flex items-end gap-2 ${isMe ? 'flex-row-reverse' : 'flex-row'}`}>

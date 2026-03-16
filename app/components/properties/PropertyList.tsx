@@ -1,4 +1,5 @@
 import PropertyListItem from "./PropertyListItem";
+import { API_URL } from "@/lib/config";
 
 interface Property {
   id: string;
@@ -35,7 +36,7 @@ const PropertyList = async ({ searchParams }: PropertyListProps) => {
     if (searchParams?.check_out) params.set('check_out', searchParams.check_out);
 
     const query = params.toString();
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/properties/${query ? `?${query}` : ''}`;
+    const url = `${API_URL}/api/properties/${query ? `?${query}` : ''}`;
 
     const res = await fetch(url, { cache: "no-store" });
     if (res.ok) properties = await res.json();

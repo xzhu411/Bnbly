@@ -41,14 +41,14 @@ def login(request):
 
     if not email or not password:
         return Response(
-            {'error': '邮箱和密码不能为空'},
+            {'error': 'Email and password are required'},
             status=status.HTTP_400_BAD_REQUEST
         )
 
     user = authenticate(request, username=email, password=password)
     if not user:
         return Response(
-            {'error': '邮箱或密码错误'},
+            {'error': 'Invalid email or password'},
             status=status.HTTP_401_UNAUTHORIZED
         )
 
@@ -66,9 +66,9 @@ def logout(request):
         refresh_token = request.data.get('refresh')
         token = RefreshToken(refresh_token)
         token.blacklist()
-        return Response({'message': '已成功登出'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Successfully logged out'}, status=status.HTTP_200_OK)
     except Exception:
-        return Response({'error': '登出失败'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Failed to log out'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -85,7 +85,7 @@ def landlord_detail(request, pk):
     try:
         landlord = User.objects.get(pk=pk)
     except User.DoesNotExist:
-        return Response({'error': '用户不存在'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
     return Response(UserSerializer(landlord).data)
 
 

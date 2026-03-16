@@ -6,7 +6,7 @@ from django.db import models
 class CustomUserManager(UserManager):
     def _create_user(self, name, email, password, **extra_fields):
         if not email:
-            raise ValueError("邮箱不能为空")
+            raise ValueError("Email must be set")
         email = self.normalize_email(email)
         user = self.model(email=email, name=name, **extra_fields)
         user.set_password(password)

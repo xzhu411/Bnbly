@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { API_URL } from "@/lib/config";
 
 interface Landlord {
     id: string;
@@ -20,7 +21,7 @@ interface Property {
 
 async function getLandlord(id: string): Promise<Landlord | null> {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/landlord/${id}/`, {
+        const res = await fetch(`${API_URL}/api/auth/landlord/${id}/`, {
             cache: "no-store",
         });
         if (!res.ok) return null;
@@ -32,7 +33,7 @@ async function getLandlord(id: string): Promise<Landlord | null> {
 
 async function getLandlordProperties(id: string): Promise<Property[]> {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties/landlord/${id}/`, {
+        const res = await fetch(`${API_URL}/api/properties/landlord/${id}/`, {
             cache: "no-store",
         });
         if (!res.ok) return [];
@@ -60,7 +61,7 @@ const LandlordDetailPage = async ({ params }: { params: Promise<{ id: string }> 
                         <div className="mb-4 h-[120px] w-[120px] overflow-hidden rounded-full bg-airbnb flex items-center justify-center text-white text-5xl font-bold">
                             {landlord.avatar ? (
                                 <Image
-                                    src={landlord.avatar.startsWith("http") ? landlord.avatar : `${process.env.NEXT_PUBLIC_API_URL}${landlord.avatar}`}
+                                    src={landlord.avatar.startsWith("http") ? landlord.avatar : `${API_URL}${landlord.avatar}`}
                                     alt={landlord.name}
                                     width={120}
                                     height={120}
