@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: bnbly
+      POSTGRES_USER: bnbly_user
+      POSTGRES_PASSWORD: bnbly_password
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+      - DATABASE_URL=postgresql://bnbly_user:bnbly_password@db:5432/bnbly
+      - DJANGO_SECRET_KEY=dev-secret-key-change-in-production
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - db
+      - redis
+    command: >
+      sh -c "python manage.py makemigrations useraccount &&
+             python manage.py makemigrations property &&
+             python manage.py migrate &&
+             daphne -b 0.0.0.0 -p 8000 bnbly_backend.asgi:application"
+
+volumes:
+  postgres_data:
