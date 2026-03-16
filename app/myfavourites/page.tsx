@@ -28,7 +28,7 @@ const MyFavouritesPage = () => {
             return;
         }
 
-        fetch("http://localhost:8000/api/properties/favourites/", {
+        fetch("${process.env.NEXT_PUBLIC_API_URL}/api/properties/favourites/", {
             headers: { Authorization: `Bearer ${accessToken}` },
         })
             .then(res => res.json())

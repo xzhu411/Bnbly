@@ -25,7 +25,7 @@ const UserNav = () => {
     // Fix: safely handle null avatar
     const rawAvatar = (user as any)?.avatar_url || user?.avatar || null;
     const avatarUrl = rawAvatar
-        ? (rawAvatar.startsWith('http') ? rawAvatar : `http://localhost:8000${rawAvatar}`)
+        ? (rawAvatar.startsWith('http') ? rawAvatar : `${process.env.NEXT_PUBLIC_API_URL}${rawAvatar}`)
         : null;
 
     const initials = user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || '?';

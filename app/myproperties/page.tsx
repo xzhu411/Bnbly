@@ -30,7 +30,7 @@ const MyPropertiesPage = () => {
 
     useEffect(() => {
         if (!mounted || !isAuthenticated()) { setIsLoading(false); return; }
-        authFetch("http://localhost:8000/api/properties/my/", {
+        authFetch("${process.env.NEXT_PUBLIC_API_URL}/api/properties/my/", {
             headers: { Authorization: `Bearer ${accessToken}` },
         })
             .then(res => res.json())
@@ -46,7 +46,7 @@ const MyPropertiesPage = () => {
         setDeletingId(id);
         try {
             const res = await authFetch(
-                `http://localhost:8000/api/properties/${id}/delete/`,
+                `${process.env.NEXT_PUBLIC_API_URL}/api/properties/${id}/delete/`,
                 {
                     method: 'DELETE',
                     headers: { Authorization: `Bearer ${accessToken}` },

@@ -35,7 +35,7 @@ const PropertyList = async ({ searchParams }: PropertyListProps) => {
     if (searchParams?.check_out) params.set('check_out', searchParams.check_out);
 
     const query = params.toString();
-    const url = `http://localhost:8000/api/properties/${query ? `?${query}` : ''}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/properties/${query ? `?${query}` : ''}`;
 
     const res = await fetch(url, { cache: "no-store" });
     if (res.ok) properties = await res.json();

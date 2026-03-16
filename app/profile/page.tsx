@@ -26,7 +26,7 @@ const ProfilePage = () => {
             if (user.avatar) {
                 const url = user.avatar.startsWith('http')
                     ? user.avatar
-                    : `http://localhost:8000${user.avatar}`;
+                    : `${process.env.NEXT_PUBLIC_API_URL}${user.avatar}`;
                 setAvatarPreview(url);
             }
         }
@@ -51,7 +51,7 @@ const ProfilePage = () => {
             if (name) formData.append('name', name);
             if (avatarFile) formData.append('avatar', avatarFile);
 
-            const res = await authFetch('http://localhost:8000/api/auth/profile/', {
+            const res = await authFetch('${process.env.NEXT_PUBLIC_API_URL}/api/auth/profile/', {
                 method: 'PATCH',
                 headers: { Authorization: `Bearer ${accessToken}` },
                 body: formData,
@@ -68,7 +68,7 @@ const ProfilePage = () => {
                 if (updatedUser.avatar) {
                     const url = updatedUser.avatar.startsWith('http')
                         ? updatedUser.avatar
-                        : `http://localhost:8000${updatedUser.avatar}`;
+                        : `${process.env.NEXT_PUBLIC_API_URL}${updatedUser.avatar}`;
                     setAvatarPreview(url);
                 }
             } else {

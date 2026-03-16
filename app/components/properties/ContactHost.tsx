@@ -23,7 +23,7 @@ const ContactHost = ({ landlordId, propertyId }: ContactHostProps) => {
         setIsLoading(true);
         try {
             const res = await fetch(
-                `http://localhost:8000/api/conversations/start/${landlordId}/`,
+                `${process.env.NEXT_PUBLIC_API_URL}/api/conversations/start/${landlordId}/`,
                 {
                     method: "POST",
                     headers: {

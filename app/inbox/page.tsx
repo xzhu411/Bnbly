@@ -48,7 +48,7 @@ const InboxPage = () => {
     useEffect(() => {
         if (!mounted) return;
         if (!isAuthenticated()) { setIsLoading(false); return; }
-        fetch("http://localhost:8000/api/conversations/", {
+        fetch("${process.env.NEXT_PUBLIC_API_URL}/api/conversations/", {
             headers: { Authorization: `Bearer ${accessToken}` },
         })
             .then(res => res.json())
@@ -92,7 +92,7 @@ const InboxPage = () => {
                     {conversations.map((conv) => {
                         const other = conv.participants.find(p => p.id !== user?.id);
                         const otherAvatarUrl = other?.avatar_url || (other?.avatar
-                            ? (other.avatar.startsWith('http') ? other.avatar : `http://localhost:8000${other.avatar}`)
+                            ? (other.avatar.startsWith('http') ? other.avatar : `${process.env.NEXT_PUBLIC_API_URL}${other.avatar}`)
                             : null);
 
                         // If current user is the landlord → other person is Guest

@@ -53,7 +53,7 @@ const ReservationSideBar = ({ propertyId, pricePerNight, landlordId }: Reservati
 
         try {
             const res = await fetch(
-                `http://localhost:8000/api/reservations/create/${propertyId}/`,
+                `${process.env.NEXT_PUBLIC_API_URL}/api/reservations/create/${propertyId}/`,
                 {
                     method: 'POST',
                     headers: {

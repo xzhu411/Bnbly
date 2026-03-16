@@ -62,7 +62,7 @@ const ConversationDetail = ({ conversationId }: { conversationId: string }) => {
         if (!mounted || !accessToken) return;
         if (!isAuthenticated()) { router.push('/'); return; }
 
-        fetch(`http://localhost:8000/api/conversations/${conversationId}/`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/conversations/${conversationId}/`, {
             headers: { Authorization: `Bearer ${accessToken}` },
         })
             .then(res => res.json())
@@ -125,7 +125,7 @@ const ConversationDetail = ({ conversationId }: { conversationId: string }) => {
             setIsLoading(true);
             try {
                 const res = await fetch(
-                    `http://localhost:8000/api/conversations/${conversationId}/send/`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/conversations/${conversationId}/send/`,
                     {
                         method: "POST",
                         headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
@@ -150,7 +150,7 @@ const ConversationDetail = ({ conversationId }: { conversationId: string }) => {
 
     const other = info?.participants.find(p => p.id !== user?.id);
     const otherAvatarUrl = other?.avatar_url || (other?.avatar
-        ? (other.avatar.startsWith('http') ? other.avatar : `http://localhost:8000${other.avatar}`)
+        ? (other.avatar.startsWith('http') ? other.avatar : `${process.env.NEXT_PUBLIC_API_URL}${other.avatar}`)
         : null);
     const currentUserIsLandlord = info?.property_landlord_id === user?.id;
     const roleLabel = info?.property_id ? (currentUserIsLandlord ? 'Guest' : 'Host') : null;
@@ -207,7 +207,7 @@ const ConversationDetail = ({ conversationId }: { conversationId: string }) => {
                 {messages.map((msg) => {
                     const isMe = msg.sender.id === user?.id;
                     const senderAvatarUrl = msg.sender.avatar_url || (msg.sender.avatar
-                        ? (msg.sender.avatar.startsWith('http') ? msg.sender.avatar : `http://localhost:8000${msg.sender.avatar}`)
+                        ? (msg.sender.avatar.startsWith('http') ? msg.sender.avatar : `${process.env.NEXT_PUBLIC_API_URL}${msg.sender.avatar}`)
                         : null);
                     return (
                         <div key={msg.id} className={`flex items-end gap-2 ${isMe ? 'flex-row-reverse' : 'flex-row'}`}>

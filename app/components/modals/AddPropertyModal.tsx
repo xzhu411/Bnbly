@@ -90,7 +90,7 @@ const AddPropertyModal = () => {
             if (image) formData.append('image', image);
             extraImages.forEach(img => formData.append('images', img));
 
-            const res = await fetch('http://localhost:8000/api/properties/create/', {
+            const res = await fetch('${process.env.NEXT_PUBLIC_API_URL}/api/properties/create/', {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${accessToken}` },
                 body: formData,

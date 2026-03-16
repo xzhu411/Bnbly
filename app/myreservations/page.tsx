@@ -43,10 +43,10 @@ const MyReservationsPage = () => {
     const fetchAll = () => {
         if (!isAuthenticated() || !accessToken) { setIsLoading(false); return; }
         Promise.all([
-            authFetch("http://localhost:8000/api/reservations/my/", {
+            authFetch("${process.env.NEXT_PUBLIC_API_URL}/api/reservations/my/", {
                 headers: { Authorization: `Bearer ${accessToken}` },
             }).then(r => r.json()),
-            authFetch("http://localhost:8000/api/reservations/hosting/", {
+            authFetch("${process.env.NEXT_PUBLIC_API_URL}/api/reservations/hosting/", {
                 headers: { Authorization: `Bearer ${accessToken}` },
             }).then(r => r.json()),
         ]).then(([guest, host]) => {
@@ -61,7 +61,7 @@ const MyReservationsPage = () => {
     const handleCancelAsGuest = async (id: string) => {
         if (!confirm("Cancel this reservation?")) return;
         setCancellingId(id);
-        const res = await authFetch(`http://localhost:8000/api/reservations/cancel/${id}/`, {
+        const res = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reservations/cancel/${id}/`, {
             method: 'DELETE',
             headers: { Authorization: `Bearer ${accessToken}` },
         });
@@ -72,7 +72,7 @@ const MyReservationsPage = () => {
     const handleCancelAsHost = async (id: string) => {
         if (!confirm("Cancel this guest's reservation?")) return;
         setCancellingId(id);
-        const res = await authFetch(`http://localhost:8000/api/reservations/host-cancel/${id}/`, {
+        const res = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reservations/host-cancel/${id}/`, {
             method: 'DELETE',
             headers: { Authorization: `Bearer ${accessToken}` },
         });
@@ -81,7 +81,7 @@ const MyReservationsPage = () => {
     };
 
     const getImageSrc = (image: string | null) =>
-        image ? (image.startsWith('http') ? image : `http://localhost:8000${image}`) : '/beach1.jpeg';
+        image ? (image.startsWith('http') ? image : `${process.env.NEXT_PUBLIC_API_URL}${image}`) : '/beach1.jpeg';
 
     if (isLoading) return (
         <main className="max-w-[1500px] mx-auto px-6 pb-6">

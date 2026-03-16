@@ -48,7 +48,7 @@ const EditPropertyPage = () => {
 
     useEffect(() => {
         if (!id) return;
-        fetch(`http://localhost:8000/api/properties/${id}/`)
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/properties/${id}/`)
             .then(res => res.json())
             .then(data => {
                 setTitle(data.title || '');
@@ -65,12 +65,12 @@ const EditPropertyPage = () => {
                 setState(data.state || '');
                 setZipCode(data.zip_code || '');
                 if (data.image) {
-                    setCurrentImage(data.image.startsWith('http') ? data.image : `http://localhost:8000${data.image}`);
+                    setCurrentImage(data.image.startsWith('http') ? data.image : `${process.env.NEXT_PUBLIC_API_URL}${data.image}`);
                 }
                 if (data.images) {
                     setExistingImages(data.images.map((img: { id: string; image: string }) => ({
                         id: img.id,
-                        image: img.image.startsWith('http') ? img.image : `http://localhost:8000${img.image}`,
+                        image: img.image.startsWith('http') ? img.image : `${process.env.NEXT_PUBLIC_API_URL}${img.image}`,
                     })));
                 }
                 setIsFetching(false);
@@ -95,7 +95,7 @@ const EditPropertyPage = () => {
 
     const deleteExistingImage = async (imageId: string) => {
         const res = await authFetch(
-            `http://localhost:8000/api/properties/${id}/images/${imageId}/delete/`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/properties/${id}/images/${imageId}/delete/`,
             { method: 'DELETE', headers: { Authorization: `Bearer ${accessToken}` } }
         );
         if (res.ok) {
@@ -127,7 +127,7 @@ const EditPropertyPage = () => {
             if (newMainImage) formData.append('image', newMainImage);
 
             const res = await authFetch(
-                `http://localhost:8000/api/properties/${id}/update/`,
+                `${process.env.NEXT_PUBLIC_API_URL}/api/properties/${id}/update/`,
                 { method: 'PATCH', headers: { Authorization: `Bearer ${accessToken}` }, body: formData }
             );
 
@@ -141,7 +141,7 @@ const EditPropertyPage = () => {
                 const imgFormData = new FormData();
                 newExtraImages.forEach(img => imgFormData.append('images', img));
                 await authFetch(
-                    `http://localhost:8000/api/properties/${id}/images/`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/properties/${id}/images/`,
                     { method: 'POST', headers: { Authorization: `Bearer ${accessToken}` }, body: imgFormData }
                 );
             }
