@@ -1,162 +1,192 @@
 # BnBly
 
-BnBly is a full-stack Airbnb-style booking app built with Next.js on the frontend and Django REST Framework on the backend.
+> A full-stack Airbnb-style property booking platform built with **Next.js** and **Django REST Framework**.
 
-It supports browsing listings, saving favourites, messaging hosts, creating reservations, managing hosted properties, and viewing booked dates on listing calendars.
+BnBly lets users browse and search listings, make reservations, manage hosted properties, save favourites, and chat directly with hosts — all in one place.
 
-## Features
+---
 
-- User authentication with JWT
-- Browse and search property listings
-- Property detail pages with map support
-- Add, edit, and manage hosted properties
-- Favourite / unfavourite properties
-- Create and cancel reservations
-- View personal trips and host-side reservations
-- Inbox and conversation flow between guests and hosts
-- Booked-date API for unavailable reservation ranges
-- Django admin for managing users, properties, reservations, and conversations
+## ✨ Features
 
-## Tech Stack
+- 🔐 **JWT Authentication** — register, log in, and stay signed in with rotating refresh tokens
+- 🏠 **Property Listings** — browse all properties with image galleries and map view
+- 🔍 **Advanced Search** — filter by location, category, price range, guest count, and date availability
+- 📅 **Reservations** — book properties, view trips, cancel bookings, and block already-reserved dates on the calendar
+- ❤️ **Favourites** — save and unsave properties for quick access
+- 💬 **Messaging** — real-time inbox and conversation flow between guests and hosts (Django Channels / WebSocket)
+- 🏡 **Host Dashboard** — add, edit, and manage your own listed properties
+- 🛠️ **Django Admin** — manage users, properties, reservations, and conversations
+
+---
+
+## 🛠 Tech Stack
 
 ### Frontend
-
-- Next.js 16
-- React 19
-- TypeScript
-- Tailwind CSS
-- Zustand
-- React Leaflet
+| Technology | Purpose |
+|---|---|
+| Next.js 16 (App Router) | React framework & routing |
+| React 19 | UI library |
+| TypeScript | Type safety |
+| Tailwind CSS | Styling |
+| Zustand | Global state management |
+| React Leaflet | Interactive maps |
+| React Date Range | Date picker for reservations |
 
 ### Backend
+| Technology | Purpose |
+|---|---|
+| Django 5 | Web framework |
+| Django REST Framework | REST API |
+| Simple JWT | JWT authentication |
+| Django Channels + Daphne | WebSocket / real-time messaging |
+| PostgreSQL | Primary database |
+| Redis | Channel layer for WebSockets |
 
-- Django 5
-- Django REST Framework
-- Simple JWT
-- PostgreSQL
-- Redis
-- Django Channels / Daphne
+---
 
-## Project Structure
+## 📁 Project Structure
 
-```text
+```
 bnbly/
-├── app/                 # Next.js app router frontend
-├── backend/             # Django backend
-├── docker-compose.yml   # Local Docker services
-├── package.json         # Frontend scripts
+├── app/                        # Next.js App Router (frontend)
+│   ├── components/             # Reusable UI components
+│   ├── hooks/                  # Custom React hooks
+│   ├── lib/                    # Utilities and helpers
+│   └── ...                     # Route pages
+├── backend/                    # Django backend
+│   ├── useraccount/            # Auth & user model
+│   ├── property/               # Listings and favourites
+│   ├── reservation/            # Booking logic
+│   ├── conversation/           # Messaging / WebSocket
+│   └── bnbly_backend/          # Django settings & routing
+├── docker-compose.yml          # Local Docker services
+├── package.json                # Frontend scripts & dependencies
 └── README.md
 ```
 
-## Main Pages
+---
 
-- `/` - home page and listing feed
-- `/properties/[id]` - property details and reservation UI
-- `/myproperties` - host property management
-- `/myreservations` - guest and host reservation views
-- `/myfavourites` - saved properties
-- `/inbox` - conversations and messaging
-- `/profile` - user profile
-- `/admin` - Django admin
+## 🚀 Getting Started
 
-## How To Run
+### Prerequisites
 
-## Option 1: Run With Docker
+- [Docker](https://www.docker.com/) & Docker Compose
+- Node.js ≥ 18
 
-This is the easiest way to run the backend services locally.
+---
 
-From the project root:
+### Option 1: Full Stack with Docker (Recommended)
+
+This starts PostgreSQL, Redis, and the Django backend together.
 
 ```bash
+# 1. Clone the repo
+git clone https://github.com/xzhu411/Bnbly.git
+cd bnbly
+
+# 2. Start backend services
 docker compose up -d --build
 ```
 
-This starts:
+Services started:
 
-- PostgreSQL on `localhost:5432`
-- Redis on `localhost:6379`
-- Django backend on `http://localhost:8000`
+| Service | URL |
+|---|---|
+| PostgreSQL | `localhost:5432` |
+| Redis | `localhost:6379` |
+| Django API | `http://localhost:8000` |
 
-Then start the frontend in another terminal:
+```bash
+# 3. Start the frontend (in a new terminal)
+npm install
+npm run dev
+```
+
+Open the app at **[http://localhost:3000](http://localhost:3000)**
+
+---
+
+### Option 2: Frontend Only
+
+If the backend is already running elsewhere:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Frontend runs at:
+Make sure your `.env.local` points to the correct backend:
 
-```text
-http://localhost:3000
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_WS_URL=ws://localhost:8000
 ```
 
-## Option 2: Run Frontend Only
+---
 
-If your backend is already running elsewhere, you can start only the Next.js app:
+## ⚙️ Environment Variables
 
-```bash
-npm install
-npm run dev
-```
+### Frontend (`.env.local`)
 
-Make sure your `.env.local` points `NEXT_PUBLIC_API_URL` to the correct backend.
+| Variable | Description |
+|---|---|
+| `NEXT_PUBLIC_API_URL` | Base URL of the Django backend |
+| `NEXT_PUBLIC_WS_URL` | WebSocket URL for real-time messaging |
 
-## Backend Notes
+### Backend (Docker — defined in `docker-compose.yml`)
 
-The backend is configured in Docker to:
+| Variable | Description |
+|---|---|
+| `DEBUG` | Enable/disable debug mode |
+| `DJANGO_SECRET_KEY` | Django secret key |
+| `ALLOWED_HOSTS` | Comma-separated allowed hostnames |
+| `CORS_ALLOWED_ORIGINS` | Comma-separated allowed frontend origins |
+| `REDIS_URL` | Redis connection URL |
 
-- run migrations on startup
-- expose the API on port `8000`
-- use PostgreSQL as the main database
-- use Redis for Channels
+---
 
-Important API groups:
+## 🔌 API Overview
 
-- `/api/auth/`
-- `/api/properties/`
-- `/api/reservations/`
-- `/api/conversations/`
+| Prefix | Description |
+|---|---|
+| `/api/auth/` | Register, login, logout, token refresh |
+| `/api/properties/` | List, create, search, favourite properties |
+| `/api/reservations/` | Create, cancel, and list reservations |
+| `/api/conversations/` | Start and fetch conversations |
 
-## Admin
+---
 
-To use Django admin, create a superuser inside the backend container:
+## 🖥 Pages
+
+| Route | Description |
+|---|---|
+| `/` | Home page — listing feed with search |
+| `/properties/[id]` | Property detail page with reservation UI |
+| `/myproperties` | Host property management |
+| `/myreservations` | Guest trips & host-side reservations |
+| `/myfavourites` | Saved properties |
+| `/inbox` | Conversations and messaging |
+| `/profile` | User profile |
+| `/admin` | Django admin panel |
+
+---
+
+## 🛡 Django Admin
+
+Create a superuser to access the admin panel:
 
 ```bash
 docker compose exec backend python manage.py createsuperuser
 ```
 
-Then visit:
+Then visit: **[http://localhost:8000/admin](http://localhost:8000/admin)**
 
-```text
-http://localhost:8000/admin
-```
+---
 
-## Environment
+## 📜 License
 
-Frontend:
+This project is for educational purposes.
 
-- `NEXT_PUBLIC_API_URL`
-- `NEXT_PUBLIC_WS_URL` if needed for websockets
+---
 
-Backend Docker environment is currently defined in `docker-compose.yml`, including:
-
-- `DEBUG`
-- `DJANGO_SECRET_KEY`
-- `ALLOWED_HOSTS`
-- `CORS_ALLOWED_ORIGINS`
-- `REDIS_URL`
-
-## Current Local Workflow
-
-1. Start backend services with Docker
-2. Run `npm run dev` for the frontend
-3. Open the app on `localhost:3000`
-4. Open Django admin on `localhost:8000/admin`
-
-## Repository
-
-GitHub:
-
-```text
-https://github.com/xzhu411/Bnbly
-```
+> GitHub: [https://github.com/xzhu411/Bnbly](https://github.com/xzhu411/Bnbly)
