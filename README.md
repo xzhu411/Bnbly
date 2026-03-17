@@ -8,6 +8,15 @@ BnBly lets users browse and search listings, make reservations, manage hosted pr
 ## 🎬 Demo
  
 [![Watch the demo](https://img.youtube.com/vi/y4o4HBXYw_Q/maxresdefault.jpg)](https://youtu.be/y4o4HBXYw_Q)
+The demo walkthrough covers:
+ 
+- 🔐 Sign up & log in
+- 👤 Edit profile
+- 🏠 Add a property listing
+- 📅 Make a reservation
+- ❌ Cancel a reservation
+- ❤️ Favourite a property
+- 💬 Send messages to a host
 
 ## ✨ Features
 
