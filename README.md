@@ -5,6 +5,9 @@
 BnBly lets users browse and search listings, make reservations, manage hosted properties, save favourites, and chat directly with hosts — all in one place.
 
 ---
+## 🎬 Demo
+ 
+[![Watch the demo](https://img.youtube.com/vi/y4o4HBXYw_Q/maxresdefault.jpg)](https://youtu.be/y4o4HBXYw_Q)
 
 ## ✨ Features
 
